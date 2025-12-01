@@ -15,14 +15,31 @@ let port = process.env.PORT
 let app = express()
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors({
-    origin:["http://localhost:5173",
-        "https://lms-six-mocha.vercel.app"
-    ],
+// app.use(cors({
+//     origin:["http://localhost:5173",
+//         "https://lms-six-mocha.vercel.app"
+//     ],
 
     
-    credentials:true
-}))
+//     credentials:true
+// }))
+app.use(cors({
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        // Define specific allowed origins
+        const allowedOrigins = ["http://localhost:5173"];
+
+        // Check if origin is in the allowed list OR ends with .vercel.app
+        if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+            return callback(null, true);
+        } else {
+            return callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
 app.use("/api/auth", authRouter)
 app.use("/api/user", userRouter)
 app.use("/api/course", courseRouter)
