@@ -26,7 +26,9 @@ import ViewLecture from './pages/ViewLecture'
 import SearchWithAi from './pages/SearchWithAi'
 import getAllReviews from './customHooks/getAllReviews'
 
-export const serverUrl = "http://localhost:8000"
+// export const serverUrl = "http://localhost:8000"
+// Uses the environment variable if available, otherwise falls back to localhost
+export const serverUrl = import.meta.env.VITE_APP_BASE_URL || "http://localhost:8000";
 
 function App() {
   
